@@ -39,6 +39,18 @@ public class EmployeeService extends CommonUtil {
 	private PreparedStatement preparedStatement;
 	
 	private static final int emp = 0;
+	
+	/**
+	 * EmployeeService constructor
+	 * 
+	 * @throws ClassNotFoundException
+	 * 				-Thrown when an application tries to load in a class through itsstring name using: 
+	 * 				•The forName method in class Class. 
+	 *				•The findSystemClass method in class ClassLoader . 
+	 *				•The loadClass method in class ClassLoader.
+     *@throws SQLException
+     *				-An exception that provides information on a database accesserror or other errors.
+	 */
 
 	public EmployeeService() {
 		
@@ -53,7 +65,10 @@ public class EmployeeService extends CommonUtil {
 				logger.log(Level.SEVERE ,e.getMessage());
 			}
 	}
-
+	
+	/**
+	 * employeeFromCML
+	 */
 	public void employeesFromXML() {
 
 		try {
@@ -73,7 +88,10 @@ public class EmployeeService extends CommonUtil {
 		} catch (Exception e) {
 		}
 	}
-
+	
+	/**
+	 * Create Employee Table
+	 */
 	public void createEmployeeTable() {
 		try {
 			s = connection.createStatement();
@@ -82,7 +100,10 @@ public class EmployeeService extends CommonUtil {
 		} catch (Exception e) {
 		}
 	}
-
+	
+	/**
+	 * addEmplyee 
+	 */
 	public void addEmployee() {
 		try {
 			preparedStatement = connection.prepareStatement(QueryUtil.Q("q3"));
@@ -102,13 +123,13 @@ public class EmployeeService extends CommonUtil {
 		} catch (Exception e) {
 		}
 	}
+	
+	/**
+	 * getEmployeeById
+	 * @param eid
+	 */
 
-<<<<<<< HEAD
-	public void employeeGetById(String eid) {
-=======
 	public void getEmployeeById(String eid) {
->>>>>>> c9448e6c7018c4ce56f90887929040df6e23887b
-
 		Employee e = new Employee();
 		try {
 			preparedStatement = connection.prepareStatement(QueryUtil.Q("q4"));
@@ -128,12 +149,13 @@ public class EmployeeService extends CommonUtil {
 		} catch (Exception ex) {
 		}
 	}
+	
+	/**
+	 * deleteEmployee 
+	 * @param eid
+	 */
 
-<<<<<<< HEAD
 	public void deleteEmployee(String eid) {
-=======
-	public void DeleteEmployee(String eid) {
->>>>>>> c9448e6c7018c4ce56f90887929040df6e23887b
 
 		try {
 			preparedStatement = connection.prepareStatement(QueryUtil.Q("q6"));
@@ -143,10 +165,14 @@ public class EmployeeService extends CommonUtil {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * display Employees
+	 */
 
 	public void displayEmployee() {
 
-		ArrayList<Employee> l = new ArrayList<Employee>();
+		ArrayList<Employee> empList = new ArrayList<Employee>();
 		try {
 			preparedStatement = connection.prepareStatement(QueryUtil.Q("q5"));
 			ResultSet r = preparedStatement.executeQuery();
@@ -158,14 +184,18 @@ public class EmployeeService extends CommonUtil {
 				e.facultyName(r.getString(4));
 				e.department(r.getString(5));
 				e.designation(r.getString(6));
-				l.add(e);
+				empList.add(e);
 			}
 		} catch (Exception e) {
 		}
-		outputEmployee(l);
+		outputEmployee(empList);
 	}
 	
-	public void outputEmployee(ArrayList<Employee> l){
+	/**
+	 * Employee Output Display
+	 * @param l
+	 */
+	public void outputEmployee(ArrayList<Employee> empList){
 
 		
 		System.out.println("Employee ID" + "\t\t" + "Full Name" + "\t\t" + "Address" + "\t\t" + "Faculty Name" + "\t\t"
