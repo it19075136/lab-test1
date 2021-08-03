@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.sql.Statement;
+
+
 import java.io.IOException;
 import com.hackerthon.model.Employee;
 import java.util.ArrayList;
@@ -21,7 +23,8 @@ import com.hackerthon.common.CommonConstants;
 import com.hackerthon.common.UtilC;
 import com.hackerthon.common.UtilTRANSFORM;
 
-public class EmployeeService extends UtilC {
+public class EmployeeService extends CommonUtil {
+
 
 	private final ArrayList<Employee> employeeList = new ArrayList<Employee>();
 
@@ -34,6 +37,8 @@ public class EmployeeService extends UtilC {
 	private Properties properties;
 
 	private PreparedStatement ps;
+	
+	private static final String emp;
 
 	public EmployeeService() {
 		
@@ -52,7 +57,7 @@ public class EmployeeService extends UtilC {
 	public void employeesFromXML() {
 
 		try {
-			int s = UtilTRANSFORM.XMLXPATHS().size();
+			int s = TransformUtil.XMLXPATHS().size();
 			for (int i = 0; i < s; i++) {
 				Map<String, String> empList= UtilTRANSFORM.XMLXPATHS().get(i);
 				Employee employee = Employee.getInstance();
@@ -72,15 +77,15 @@ public class EmployeeService extends UtilC {
 	public void createEmployeeTable() {
 		try {
 			s = c.createStatement();
-			s.executeUpdate(UtilQ.Q("q2"));
-			s.executeUpdate(UtilQ.Q("q1"));
+			s.executeUpdate(QueryUtil.Q("q2"));
+			s.executeUpdate(QueryUtil.Q("q1"));
 		} catch (Exception e) {
 		}
 	}
 
 	public void addEmployee() {
 		try {
-			ps = c.prepareStatement(UtilQ.Q("q3"));
+			ps = c.prepareStatement(QueryUtil.Q("q3"));
 			c.setAutoCommit(false);
 			for(int i = 0; i < employeeList.size(); i++){
 				Employee e = employeeList.get(i);
@@ -102,14 +107,14 @@ public class EmployeeService extends UtilC {
 
 		Employee e = new Employee();
 		try {
-			ps = c.prepareStatement(UtilQ.Q("q4"));
+			ps = c.prepareStatement(QueryUtil.Q("q4"));
 			ps.setString(1, eid);
 			ResultSet R = ps.executeQuery();
 			while (R.next()) {
 				e.empID(R.getString(1));
-				e.fULLnAME(R.getString(2));
+				e.fullName(R.getString(2));
 				e.address(R.getString(3));
-				e.fACULTYNAME(R.getString(4));
+				e.facultyName(R.getString(4));
 				e.department(R.getString(5));
 				e.designation(R.getString(6));
 			}
@@ -123,7 +128,7 @@ public class EmployeeService extends UtilC {
 	public void DeleteEmployee(String eid) {
 
 		try {
-			ps = c.prepareStatement(UtilQ.Q("q6"));
+			ps = c.prepareStatement(QueryUtil.Q("q6"));
 			ps.setString(1, eid);
 			ps.executeUpdate();
 		} catch (Exception e) {
@@ -135,14 +140,14 @@ public class EmployeeService extends UtilC {
 
 		ArrayList<Employee> l = new ArrayList<Employee>();
 		try {
-			ps = c.prepareStatement(UtilQ.Q("q5"));
+			ps = c.prepareStatement(QueryUtil.Q("q5"));
 			ResultSet r = ps.executeQuery();
 			while (r.next()) {
 				Employee e = new Employee();
 				e.empID(r.getString(1));
-				e.fULLnAME(r.getString(2));
+				e.fullName(r.getString(2));
 				e.address(r.getString(3));
-				e.fACULTYNAME(r.getString(4));
+				e.facultyName(r.getString(4));
 				e.department(r.getString(5));
 				e.designation(r.getString(6));
 				l.add(e);
@@ -153,13 +158,14 @@ public class EmployeeService extends UtilC {
 	}
 	
 	public void outputEmployee(ArrayList<Employee> l){
+
 		
 		System.out.println("Employee ID" + "\t\t" + "Full Name" + "\t\t" + "Address" + "\t\t" + "Faculty Name" + "\t\t"
 				+ "Department" + "\t\t" + "Designation" + "\n");
 		System.out
 				.println("================================================================================================================");
-		for(int i = 0; i < l.size(); i++){
-			Employee e = l.get(i);
+		for(int emp = 0; emp < empList.size(); emp++){
+			Employee e = empList.get(emp);
 			System.out.println(e.getEmpID() + "\t" + e.getFullName() + "\t\t"
 					+ e.getAddress() + "\t" + e.getFacultyName() + "\t" + e.getDepartment() + "\t"
 					+ e.getDesignation() + "\n");

@@ -1,11 +1,15 @@
 package com.hackerthon.main;
 
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
-import com.hackerthon.common.UtilTRANSFORM;
+import com.hackerthon.common.TransformUtil;
 import com.hackerthon.service.EmployeeService;
 import com.hackerthon.service.GetEmpService;
+
+import sun.rmi.runtime.Log;
 
 public class ExecuteMain {
 
@@ -16,7 +20,7 @@ public class ExecuteMain {
 
 		EmployeeService employeeService = new EmployeeService();
 		try {
-			UtilTRANSFORM.rEQUESTtRANSFORM();
+			TransformUtil.rEQUESTtRANSFORM();
 			employeeService.employeesFromXML();
 			employeeService.createEmployeeTable();
 			employeeService.addEmployee();
@@ -24,6 +28,7 @@ public class ExecuteMain {
 //			employeeService.EMPLOYEEDELETE("EMP10001");
 			employeeService.displayEmployee();
 		} catch (Exception e) {
+			log.log(Level.SEVERE, e.getMessage());
 		}
 
 	}
