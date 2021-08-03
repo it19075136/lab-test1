@@ -1,27 +1,22 @@
 package com.hackerthon.service;
 
-import org.xml.sax.SAXException;
 import java.sql.Connection;
 import java.util.logging.Logger;
 import java.sql.DriverManager;
-import javax.xml.parsers.ParserConfigurationException;
 import java.sql.PreparedStatement;
-import javax.xml.xpath.XPathExpressionException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.sql.Statement;
-
-
-import java.io.IOException;
-import com.hackerthon.model.Employee;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 
 import com.hackerthon.common.CommonConstants;
-import com.hackerthon.common.UtilC;
-import com.hackerthon.common.UtilTRANSFORM;
+import com.hackerthon.common.CommonUtil;
+import com.hackerthon.common.QueryUtil;
+import com.hackerthon.common.TransformUtil;
+import com.hackerthon.model.Employee;
 
 public class EmployeeService extends CommonUtil {
 
@@ -30,15 +25,13 @@ public class EmployeeService extends CommonUtil {
 
 	private static Connection connection;
 
-	private static Statement s;
+	private static Statement statement;
 	
 	private static Logger logger = Logger.getLogger(EmployeeService.class.toString());
 	
 	private Properties properties;
 
 	private PreparedStatement preparedStatement;
-	
-	private static final int emp = 0;
 	
 	/**
 	 * EmployeeService constructor
@@ -68,13 +61,16 @@ public class EmployeeService extends CommonUtil {
 	
 	/**
 	 * employeeFromCML
+	 * 
+	 *@throws SQLException
+     *				-An exception that provides information on a database accesserror or other errors.
 	 */
 	public void employeesFromXML() {
 
 		try {
 			int s = TransformUtil.XMLXPATHS().size();
 			for (int i = 0; i < s; i++) {
-				Map<String, String> empList= UtilTRANSFORM.XMLXPATHS().get(i);
+				Map<String, String> empList= TransformUtil.XMLXPATHS().get(i);
 				Employee employee = Employee.getInstance();
 				employee.setEmpID(empList.get(CommonConstants.XPATH_EMP_ID));
 				employee.setFullName(empList.get(CommonConstants.XPATH_EMP_NAME));
@@ -86,27 +82,35 @@ public class EmployeeService extends CommonUtil {
 				logger.info(employee.toString() + "\n");
 			}
 		} catch (Exception e) {
+			logger.log(Level.SEVERE, e.getMessage());
 		}
 	}
 	
 	/**
 	 * Create Employee Table
+	 * 
+	 *@throws SQLException
+     *				-An exception that provides information on a database accesserror or other errors.
 	 */
 	public void createEmployeeTable() {
 		try {
-			s = connection.createStatement();
-			s.executeUpdate(QueryUtil.Q("q2"));
-			s.executeUpdate(QueryUtil.Q("q1"));
+			statement = connection.createStatement();
+			statement.executeUpdate(QueryUtil.Q(CommonConstants.QUERY_ID_DROP_TABLE));
+			statement.executeUpdate(QueryUtil.Q(CommonConstants.QUERY_ID_CREATE_TABLE));
+
 		} catch (Exception e) {
+			logger.log(Level.SEVERE, e.getMessage());
 		}
 	}
 	
 	/**
 	 * addEmplyee 
+	*@throws SQLException
+     *				-An exception that provides information on a database accesserror or other errors.
 	 */
 	public void addEmployee() {
 		try {
-			preparedStatement = connection.prepareStatement(QueryUtil.Q("q3"));
+			preparedStatement = connection.prepareStatement(QueryUtil.Q(CommonConstants.QUERY_ID_INSERT_EMPLOYEES));
 			connection.setAutoCommit(false);
 			for(int i = 0; i < employeeList.size(); i++){
 				Employee e = employeeList.get(i);
@@ -121,74 +125,95 @@ public class EmployeeService extends CommonUtil {
 			preparedStatement.executeBatch();
 			connection.commit();
 		} catch (Exception e) {
+			logger.log(Level.SEVERE, e.getMessage());
 		}
+		
 	}
 	
 	/**
 	 * getEmployeeById
 	 * @param eid
+	 * 
+	 *@throws SQLException
+     *				-An exception that provides information on a database accesserror or other errors.
 	 */
 
 	public void getEmployeeById(String eid) {
-		Employee e = new Employee();
-		try {
-			preparedStatement = connection.prepareStatement(QueryUtil.Q("q4"));
-			preparedStatement.setString(1, eid);
-			ResultSet R = preparedStatement.executeQuery();
-			while (R.next()) {
-				e.empID(R.getString(1));
-				e.fullName(R.getString(2));
-				e.address(R.getString(3));
-				e.facultyName(R.getString(4));
-				e.department(R.getString(5));
-				e.designation(R.getString(6));
+		Employee employee = Employee.getInstance();
+			try {
+				preparedStatement = connection.prepareStatement(QueryUtil.Q(CommonConstants.QUERY_ID_GET_EMPLOYEE_BYID));
+				ResultSet R = preparedStatement.executeQuery();
+				preparedStatement.setString(1, eid);
+				while (R.next()) {
+					employee.setEmpID(R.getString(1));
+					employee.setFullName(R.getString(2));
+					employee.setAddress(R.getString(3));
+					employee.setFacultyName(R.getString(4));
+					employee.setDepartment(R.getString(5));
+					employee.setDesignation(R.getString(6));
+				}
+			} catch (SQLException e) {
+				logger.log(Level.SEVERE, e.getMessage());
 			}
-			ArrayList<Employee> l = new ArrayList<Employee>();
-			l.add(e);
-			outputEmployee(l);
-		} catch (Exception ex) {
-		}
+			 catch (Exception e) {
+					logger.log(Level.SEVERE, e.getMessage());
+				}
+
+			ArrayList<Employee> empList = new ArrayList<Employee>();
+			empList.add(employee);
+			outputEmployee(empList);
+
 	}
 	
 	/**
 	 * deleteEmployee 
 	 * @param eid
+	 *@throws SQLException
+     *				-An exception that provides information on a database accesserror or other errors.
+	 * 
 	 */
 
 	public void deleteEmployee(String eid) {
 
 		try {
-			preparedStatement = connection.prepareStatement(QueryUtil.Q("q6"));
+			preparedStatement = connection.prepareStatement(QueryUtil.Q(CommonConstants.DELETE_EMPLOYEE));
 			preparedStatement.setString(1, eid);
 			preparedStatement.executeUpdate();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.log(Level.SEVERE, e.getMessage());
 		}
 	}
 	
 	/**
 	 * display Employees
+	 *@throws SQLException
+     *				-An exception that provides information on a database accesserror or other errors.
 	 */
 
 	public void displayEmployee() {
-
+		
 		ArrayList<Employee> empList = new ArrayList<Employee>();
-		try {
-			preparedStatement = connection.prepareStatement(QueryUtil.Q("q5"));
-			ResultSet r = preparedStatement.executeQuery();
-			while (r.next()) {
-				Employee e = new Employee();
-				e.empID(r.getString(1));
-				e.fullName(r.getString(2));
-				e.address(r.getString(3));
-				e.facultyName(r.getString(4));
-				e.department(r.getString(5));
-				e.designation(r.getString(6));
-				empList.add(e);
+
+			try {
+				preparedStatement = connection.prepareStatement(QueryUtil.Q(CommonConstants.QUERY_ID_GET_ALL_EMPLOYEES));
+				ResultSet r;
+				r = preparedStatement.executeQuery();
+				while (r.next()) {
+					Employee employee = Employee.getInstance();
+					employee.setEmpID(r.getString(1));
+					employee.setFullName(r.getString(2));
+					employee.setAddress(r.getString(3));
+					employee.setFacultyName(r.getString(4));
+					employee.setDepartment(r.getString(5));
+					employee.setDesignation(r.getString(6));
+					empList.add(employee);
+				}
+			} catch (SQLException e) {
+				logger.log(Level.SEVERE, e.getMessage());
+			} catch (Exception e) {
+				logger.log(Level.SEVERE, e.getMessage());
 			}
-		} catch (Exception e) {
-		}
-		outputEmployee(empList);
+			outputEmployee(empList);
 	}
 	
 	/**

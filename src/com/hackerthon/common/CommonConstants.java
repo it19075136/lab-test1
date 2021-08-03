@@ -64,5 +64,7 @@ public class CommonConstants {
 	/** Constant for query id of get_all_employees in EmployeeQuery.xml */
 	public static final String QUERY_ID_GET_ALL_EMPLOYEES = "get_employees";
 
+	/** Constant for delete_employee in EmployeeQuery.xml */
+	public static final String DELETE_EMPLOYEE = "get_employees";
 
 }
