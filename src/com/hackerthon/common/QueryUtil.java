@@ -20,7 +20,7 @@ public class QueryUtil extends CommonUtil {
 				.getElementsByTagName(CommonConstants.QUERY);
 		for (int x = 0; x < n.getLength(); x++) {
 			e = (Element) n.item(x);
-			if (e.getAttribute("id").equals(id))
+			if (e.getAttribute(CommonConstants.ID).equals(id))
 				break;
 		}
 		return e.getTextContent().trim();
