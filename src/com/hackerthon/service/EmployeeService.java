@@ -7,28 +7,28 @@ import java.sql.DriverManager;
 import javax.xml.parsers.ParserConfigurationException;
 import java.sql.PreparedStatement;
 import javax.xml.xpath.XPathExpressionException;
-import com.hackerthon.common.TransformUtil;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.sql.Statement;
 
-import com.hackerthon.common.CommonConstants;
-import com.hackerthon.common.CommonUtil;
-import com.hackerthon.common.QueryUtil;
+
 import java.io.IOException;
 import com.hackerthon.model.Employee;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 
+import com.hackerthon.common.CommonConstants;
+import com.hackerthon.common.UtilC;
+import com.hackerthon.common.UtilTRANSFORM;
 
 public class EmployeeService extends CommonUtil {
 
 
 	private final ArrayList<Employee> employeeList = new ArrayList<Employee>();
 
-	private static Connection c;
+	private static Connection connection;
 
 	private static Statement s;
 	
@@ -36,15 +36,15 @@ public class EmployeeService extends CommonUtil {
 	
 	private Properties properties;
 
-	private PreparedStatement ps;
+	private PreparedStatement preparedStatement;
 	
-	private static final String emp;
+	private static final int emp = 0;
 
 	public EmployeeService() {
 		
 			try {
 				Class.forName(properties.getProperty(CommonConstants.DRIVER_NAME));
-				c = DriverManager.getConnection(properties.getProperty(CommonConstants.URL), properties.getProperty(CommonConstants.USERNAME),
+				connection = DriverManager.getConnection(properties.getProperty(CommonConstants.URL), properties.getProperty(CommonConstants.USERNAME),
 						properties.getProperty(CommonConstants.PASSWORD));
 			} catch (ClassNotFoundException e) {
 				logger.log(Level.SEVERE ,e.getMessage());
@@ -54,63 +54,66 @@ public class EmployeeService extends CommonUtil {
 			}
 	}
 
-	public void EMPLOEESFROMXML() {
+	public void employeesFromXML() {
 
 		try {
 			int s = TransformUtil.XMLXPATHS().size();
 			for (int i = 0; i < s; i++) {
-
-				Map<String, String> l = TransformUtil.XMLXPATHS().get(i);
-				Employee emplo = new Employee();
-				emplo.empID(l.get("XpathEmployeeIDKey"));
-				emplo.fullName(l.get("XpathEmployeeNameKey"));
-				emplo.address(l.get("XpathEmployeeAddressKey"));
-				emplo.facultyName(l.get("XpathFacultyNameKey"));
-				emplo.department(l.get("XpathDepartmentKey"));
-				emplo.designation(l.get("XpathDesignationKey"));
-				employeeList.add(emplo);
-				System.out.println(emplo.toString() + "\n");
+				Map<String, String> empList= UtilTRANSFORM.XMLXPATHS().get(i);
+				Employee employee = Employee.getInstance();
+				employee.setEmpID(empList.get(CommonConstants.XPATH_EMP_ID));
+				employee.setFullName(empList.get(CommonConstants.XPATH_EMP_NAME));
+				employee.setAddress(empList.get(CommonConstants.XPATH_EMP_ADDRESS));
+				employee.setFacultyName(empList.get(CommonConstants.XPATH_EMP_FACULTY));
+				employee.setDepartment(empList.get(CommonConstants.XPATH_EMP_DEPARTMENT));
+				employee.setDesignation(empList.get(CommonConstants.XPATH_EMP_DESIGNATION));
+				employeeList.add(employee);
+				logger.info(employee.toString() + "\n");
 			}
 		} catch (Exception e) {
 		}
 	}
 
-	public void eMPLOYEEtABLEcREATE() {
+	public void createEmployeeTable() {
 		try {
-			s = c.createStatement();
+			s = connection.createStatement();
 			s.executeUpdate(QueryUtil.Q("q2"));
 			s.executeUpdate(QueryUtil.Q("q1"));
 		} catch (Exception e) {
 		}
 	}
 
-	public void eMPLOYEESaDD() {
+	public void addEmployee() {
 		try {
-			ps = c.prepareStatement(QueryUtil.Q("q3"));
-			c.setAutoCommit(false);
+			preparedStatement = connection.prepareStatement(QueryUtil.Q("q3"));
+			connection.setAutoCommit(false);
 			for(int i = 0; i < employeeList.size(); i++){
 				Employee e = employeeList.get(i);
-				ps.setString(1, e.getEmpID());
-				ps.setString(2, e.getFullName());
-				ps.setString(3, e.getAddress());
-				ps.setString(4, e.getFacultyName());
-				ps.setString(5, e.getDepartment());
-				ps.setString(6, e.getDesignation());
-				ps.addBatch();
+				preparedStatement.setString(1, e.getEmpID());
+				preparedStatement.setString(2, e.getFullName());
+				preparedStatement.setString(3, e.getAddress());
+				preparedStatement.setString(4, e.getFacultyName());
+				preparedStatement.setString(5, e.getDepartment());
+				preparedStatement.setString(6, e.getDesignation());
+				preparedStatement.addBatch();
 			}
-			ps.executeBatch();
-			c.commit();
+			preparedStatement.executeBatch();
+			connection.commit();
 		} catch (Exception e) {
 		}
 	}
 
-	public void eMPLOYEEGETBYID(String eid) {
+<<<<<<< HEAD
+	public void employeeGetById(String eid) {
+=======
+	public void getEmployeeById(String eid) {
+>>>>>>> c9448e6c7018c4ce56f90887929040df6e23887b
 
 		Employee e = new Employee();
 		try {
-			ps = c.prepareStatement(QueryUtil.Q("q4"));
-			ps.setString(1, eid);
-			ResultSet R = ps.executeQuery();
+			preparedStatement = connection.prepareStatement(QueryUtil.Q("q4"));
+			preparedStatement.setString(1, eid);
+			ResultSet R = preparedStatement.executeQuery();
 			while (R.next()) {
 				e.empID(R.getString(1));
 				e.fullName(R.getString(2));
@@ -121,28 +124,32 @@ public class EmployeeService extends CommonUtil {
 			}
 			ArrayList<Employee> l = new ArrayList<Employee>();
 			l.add(e);
-			employeeOutput(l);
+			outputEmployee(l);
 		} catch (Exception ex) {
 		}
 	}
 
-	public void EMPLOYEEDELETE(String eid) {
+<<<<<<< HEAD
+	public void deleteEmployee(String eid) {
+=======
+	public void DeleteEmployee(String eid) {
+>>>>>>> c9448e6c7018c4ce56f90887929040df6e23887b
 
 		try {
-			ps = c.prepareStatement(QueryUtil.Q("q6"));
-			ps.setString(1, eid);
-			ps.executeUpdate();
+			preparedStatement = connection.prepareStatement(QueryUtil.Q("q6"));
+			preparedStatement.setString(1, eid);
+			preparedStatement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void eMPLOYEEdISPLAY() {
+	public void displayEmployee() {
 
 		ArrayList<Employee> l = new ArrayList<Employee>();
 		try {
-			ps = c.prepareStatement(QueryUtil.Q("q5"));
-			ResultSet r = ps.executeQuery();
+			preparedStatement = connection.prepareStatement(QueryUtil.Q("q5"));
+			ResultSet r = preparedStatement.executeQuery();
 			while (r.next()) {
 				Employee e = new Employee();
 				e.empID(r.getString(1));
@@ -155,10 +162,11 @@ public class EmployeeService extends CommonUtil {
 			}
 		} catch (Exception e) {
 		}
-		employeeOutput(l);
+		outputEmployee(l);
 	}
 	
-	public void employeeOutput(ArrayList<Employee> empList){
+	public void outputEmployee(ArrayList<Employee> l){
+
 		
 		System.out.println("Employee ID" + "\t\t" + "Full Name" + "\t\t" + "Address" + "\t\t" + "Faculty Name" + "\t\t"
 				+ "Department" + "\t\t" + "Designation" + "\n");

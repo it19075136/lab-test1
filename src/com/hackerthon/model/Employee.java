@@ -33,7 +33,7 @@ public class Employee {
 		return idEmployee;
 	}
 	//set Employee ID
-	public void empID(String employeeID) {
+	public void setEmpID(String employeeID) {
 		this.idEmployee = employeeID;
 	}
 	//get Full Name
@@ -41,15 +41,15 @@ public class Employee {
 		return nameFull;
 	}
 	//set Full Name
-	public void fullName(String fullName) {
+	public void setFullName(String fullName) {
 		this.nameFull = fullName;
 	}
 	//get Address
-	public String getAddress() {
+	public String setGetAddress() {
 		return address;
 	}
 	//set Address
-	public void address(String address) {
+	public void setAddress(String address) {
 		this.address = address;
 	}
 	//get Faculty Name
@@ -57,7 +57,7 @@ public class Employee {
 		return facultyName;
 	}
 	//set Faculty Name
-	public void facultyName(String facultyName) {
+	public void setFacultyName(String facultyName) {
 		this.facultyName = facultyName;
 	}
 	//get Department 
@@ -65,7 +65,7 @@ public class Employee {
 		return department;
 	}
 	//set Department
-	public void department(String department) {
+	public void setDepartment(String department) {
 		this.department = department;
 	}
 	//get getDesignation
@@ -73,7 +73,7 @@ public class Employee {
 		return designation;
 	}
 	//set designation 
-	public void designation(String designation) {
+	public void setDesignation(String designation) {
 		this.designation = designation;
 	}
 	
