@@ -7,21 +7,21 @@ import java.sql.DriverManager;
 import javax.xml.parsers.ParserConfigurationException;
 import java.sql.PreparedStatement;
 import javax.xml.xpath.XPathExpressionException;
-import com.hackerthon.common.TransformUtil;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.sql.Statement;
 
-import com.hackerthon.common.CommonConstants;
-import com.hackerthon.common.CommonUtil;
-import com.hackerthon.common.QueryUtil;
+
 import java.io.IOException;
 import com.hackerthon.model.Employee;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 
+import com.hackerthon.common.CommonConstants;
+import com.hackerthon.common.UtilC;
+import com.hackerthon.common.UtilTRANSFORM;
 
 public class EmployeeService extends CommonUtil {
 
@@ -54,22 +54,21 @@ public class EmployeeService extends CommonUtil {
 			}
 	}
 
-	public void EMPLOEESFROMXML() {
+	public void employeesFromXML() {
 
 		try {
 			int s = TransformUtil.XMLXPATHS().size();
 			for (int i = 0; i < s; i++) {
-
-				Map<String, String> l = TransformUtil.XMLXPATHS().get(i);
-				Employee emplo = new Employee();
-				emplo.empID(l.get("XpathEmployeeIDKey"));
-				emplo.fullName(l.get("XpathEmployeeNameKey"));
-				emplo.address(l.get("XpathEmployeeAddressKey"));
-				emplo.facultyName(l.get("XpathFacultyNameKey"));
-				emplo.department(l.get("XpathDepartmentKey"));
-				emplo.designation(l.get("XpathDesignationKey"));
-				employeeList.add(emplo);
-				System.out.println(emplo.toString() + "\n");
+				Map<String, String> empList= UtilTRANSFORM.XMLXPATHS().get(i);
+				Employee employee = Employee.getInstance();
+				employee.setEmpID(empList.get(CommonConstants.XPATH_EMP_ID));
+				employee.setFullName(empList.get(CommonConstants.XPATH_EMP_NAME));
+				employee.setAddress(empList.get(CommonConstants.XPATH_EMP_ADDRESS));
+				employee.setFacultyName(empList.get(CommonConstants.XPATH_EMP_FACULTY));
+				employee.setDepartment(empList.get(CommonConstants.XPATH_EMP_DEPARTMENT));
+				employee.setDesignation(empList.get(CommonConstants.XPATH_EMP_DESIGNATION));
+				employeeList.add(employee);
+				logger.info(employee.toString() + "\n");
 			}
 		} catch (Exception e) {
 		}
@@ -104,7 +103,11 @@ public class EmployeeService extends CommonUtil {
 		}
 	}
 
+<<<<<<< HEAD
 	public void employeeGetById(String eid) {
+=======
+	public void getEmployeeById(String eid) {
+>>>>>>> c9448e6c7018c4ce56f90887929040df6e23887b
 
 		Employee e = new Employee();
 		try {
@@ -121,12 +124,16 @@ public class EmployeeService extends CommonUtil {
 			}
 			ArrayList<Employee> l = new ArrayList<Employee>();
 			l.add(e);
-			employeeOutput(l);
+			outputEmployee(l);
 		} catch (Exception ex) {
 		}
 	}
 
+<<<<<<< HEAD
 	public void deleteEmployee(String eid) {
+=======
+	public void DeleteEmployee(String eid) {
+>>>>>>> c9448e6c7018c4ce56f90887929040df6e23887b
 
 		try {
 			preparedStatement = connection.prepareStatement(QueryUtil.Q("q6"));
@@ -155,10 +162,11 @@ public class EmployeeService extends CommonUtil {
 			}
 		} catch (Exception e) {
 		}
-		employeeOutput(l);
+		outputEmployee(l);
 	}
 	
-	public void employeeOutput(ArrayList<Employee> empList){
+	public void outputEmployee(ArrayList<Employee> l){
+
 		
 		System.out.println("Employee ID" + "\t\t" + "Full Name" + "\t\t" + "Address" + "\t\t" + "Faculty Name" + "\t\t"
 				+ "Department" + "\t\t" + "Designation" + "\n");
