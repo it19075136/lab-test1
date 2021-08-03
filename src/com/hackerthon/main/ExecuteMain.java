@@ -1,10 +1,14 @@
 package com.hackerthon.main;
 
+import java.io.FileNotFoundException;
+
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import com.hackerthon.common.UtilTRANSFORM;
 import com.hackerthon.service.GetEmpService;
+
+import sun.rmi.runtime.Log;
 
 public class ExecuteMain {
 
@@ -22,7 +26,8 @@ public class ExecuteMain {
 //			employeeService.eMPLOYEEGETBYID("EMP10004");
 //			employeeService.EMPLOYEEDELETE("EMP10001");
 			employeeService.eMPLOYEEdISPLAY();
-		} catch (Exception e) {
+		} catch (FileNotFoundException e) {
+			log.log(Level.SERVER, e.getMessage());
 		}
 
 	}

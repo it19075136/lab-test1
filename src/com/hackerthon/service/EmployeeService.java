@@ -35,6 +35,8 @@ public class EmployeeService extends UtilC {
 	private Properties properties;
 
 	private PreparedStatement ps;
+	
+	private static final String emp;
 
 	public EmployeeService() {
 		
@@ -116,7 +118,7 @@ public class EmployeeService extends UtilC {
 			}
 			ArrayList<Employee> l = new ArrayList<Employee>();
 			l.add(e);
-			eMPLOYEEoUTPUT(l);
+			employeeOutput(l);
 		} catch (Exception ex) {
 		}
 	}
@@ -150,17 +152,17 @@ public class EmployeeService extends UtilC {
 			}
 		} catch (Exception e) {
 		}
-		eMPLOYEEoUTPUT(l);
+		employeeOutput(l);
 	}
 	
-	public void eMPLOYEEoUTPUT(ArrayList<Employee> l){
+	public void employeeOutput(ArrayList<Employee> empList){
 		
 		System.out.println("Employee ID" + "\t\t" + "Full Name" + "\t\t" + "Address" + "\t\t" + "Faculty Name" + "\t\t"
 				+ "Department" + "\t\t" + "Designation" + "\n");
 		System.out
 				.println("================================================================================================================");
-		for(int i = 0; i < l.size(); i++){
-			Employee e = l.get(i);
+		for(int emp = 0; emp < empList.size(); emp++){
+			Employee e = empList.get(emp);
 			System.out.println(e.getEmpID() + "\t" + e.getFullName() + "\t\t"
 					+ e.getAddress() + "\t" + e.getFacultyName() + "\t" + e.getDepartment() + "\t"
 					+ e.getDesignation() + "\n");
