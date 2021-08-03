@@ -8,11 +8,11 @@ import java.util.Properties;
 
 public class UtilC {
 
-	public static final Properties p = new Properties();
+	public static final Properties properties = new Properties();
 
 	static {
 		try {
-			p.load(UtilQ.class.getResourceAsStream("../config/config.properties"));
+			properties.load(UtilQ.class.getResourceAsStream("../config/config.properties"));
 		} catch (Exception e) {
 			
 		}
