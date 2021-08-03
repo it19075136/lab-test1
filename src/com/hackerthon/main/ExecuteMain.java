@@ -1,34 +1,33 @@
 package com.hackerthon.main;
 
-import java.io.FileNotFoundException;
 import java.util.logging.Level;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
+import java.util.logging.Logger;
+
 import com.hackerthon.common.TransformUtil;
 import com.hackerthon.service.EmployeeService;
-import com.hackerthon.service.GetEmpService;
 
-import sun.rmi.runtime.Log;
 
 public class ExecuteMain {
 
+	private static Logger logger = Logger.getLogger(EmployeeService.class.toString());
+
 	/**
 	 * @param args
+	 * 
 	 */
 	public static void main(String[] args) {
 
 		EmployeeService employeeService = new EmployeeService();
 		try {
-			TransformUtil.rEQUESTtRANSFORM();
+			TransformUtil.requestTransform();
 			employeeService.employeesFromXML();
 			employeeService.createEmployeeTable();
 			employeeService.addEmployee();
-//			employeeService.eMPLOYEEGETBYID("EMP10004");
-//			employeeService.EMPLOYEEDELETE("EMP10001");
+			employeeService.getEmployeeById("EMP10004");
+			employeeService.deleteEmployee("EMP10001");
 			employeeService.displayEmployee();
 		} catch (Exception e) {
-			log.log(Level.SEVERE, e.getMessage());
+			logger.log(Level.SEVERE, e.getMessage());
 		}
 
 	}

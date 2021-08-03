@@ -1,13 +1,10 @@
 package com.hackerthon.common;
 
-import  com.hackerthon.common.CommonConstants;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.io.IOException;
 import java.util.Properties;
 
-import com.hackerthon.common.*;
 public class CommonUtil {
 	
 
