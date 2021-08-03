@@ -5,7 +5,12 @@ import java.io.FileNotFoundException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
+<<<<<<< HEAD
+
+import com.hackerthon.common.TransformUtil;
+=======
 import com.hackerthon.common.UtilTRANSFORM;
+>>>>>>> 0cd8532c36dbf04db8c3e2769eb73a09cc84c69f
 import com.hackerthon.service.GetEmpService;
 
 import sun.rmi.runtime.Log;
@@ -19,7 +24,7 @@ public class ExecuteMain {
 
 		GetEmpService employeeService = new GetEmpService();
 		try {
-			UtilTRANSFORM.rEQUESTtRANSFORM();
+			TransformUtil.rEQUESTtRANSFORM();
 			employeeService.EMPLOEESFROMXML();
 			employeeService.eMPLOYEEtABLEcREATE();
 			employeeService.eMPLOYEESaDD();

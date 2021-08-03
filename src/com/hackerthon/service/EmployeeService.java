@@ -7,22 +7,24 @@ import java.sql.DriverManager;
 import javax.xml.parsers.ParserConfigurationException;
 import java.sql.PreparedStatement;
 import javax.xml.xpath.XPathExpressionException;
-import com.hackerthon.common.UtilTRANSFORM;
+import com.hackerthon.common.TransformUtil;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.sql.Statement;
-import com.hackerthon.common.UtilQ;
+
+import com.hackerthon.common.CommonConstants;
+import com.hackerthon.common.CommonUtil;
+import com.hackerthon.common.QueryUtil;
 import java.io.IOException;
 import com.hackerthon.model.Employee;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 
-import com.hackerthon.common.CommonConstants;
-import com.hackerthon.common.UtilC;
 
-public class EmployeeService extends UtilC {
+public class EmployeeService extends CommonUtil {
+
 
 	private final ArrayList<Employee> employeeList = new ArrayList<Employee>();
 
@@ -55,18 +57,19 @@ public class EmployeeService extends UtilC {
 	public void EMPLOEESFROMXML() {
 
 		try {
-			int s = UtilTRANSFORM.XMLXPATHS().size();
+			int s = TransformUtil.XMLXPATHS().size();
 			for (int i = 0; i < s; i++) {
-				Map<String, String> l = UtilTRANSFORM.XMLXPATHS().get(i);
+
+				Map<String, String> l = TransformUtil.XMLXPATHS().get(i);
 				Employee emplo = new Employee();
-				EMPLOYEE.empID(l.get("XpathEmployeeIDKey"));
-				EMPLOYEE.fULLnAME(l.get("XpathEmployeeNameKey"));
-				EMPLOYEE.address(l.get("XpathEmployeeAddressKey"));
-				EMPLOYEE.fACULTYNAME(l.get("XpathFacultyNameKey"));
-				EMPLOYEE.department(l.get("XpathDepartmentKey"));
-				EMPLOYEE.designation(l.get("XpathDesignationKey"));
-				employeeList.add(EMPLOYEE);
-				System.out.println(EMPLOYEE.toString() + "\n");
+				emplo.empID(l.get("XpathEmployeeIDKey"));
+				emplo.fullName(l.get("XpathEmployeeNameKey"));
+				emplo.address(l.get("XpathEmployeeAddressKey"));
+				emplo.facultyName(l.get("XpathFacultyNameKey"));
+				emplo.department(l.get("XpathDepartmentKey"));
+				emplo.designation(l.get("XpathDesignationKey"));
+				employeeList.add(emplo);
+				System.out.println(emplo.toString() + "\n");
 			}
 		} catch (Exception e) {
 		}
@@ -75,15 +78,15 @@ public class EmployeeService extends UtilC {
 	public void eMPLOYEEtABLEcREATE() {
 		try {
 			s = c.createStatement();
-			s.executeUpdate(UtilQ.Q("q2"));
-			s.executeUpdate(UtilQ.Q("q1"));
+			s.executeUpdate(QueryUtil.Q("q2"));
+			s.executeUpdate(QueryUtil.Q("q1"));
 		} catch (Exception e) {
 		}
 	}
 
 	public void eMPLOYEESaDD() {
 		try {
-			ps = c.prepareStatement(UtilQ.Q("q3"));
+			ps = c.prepareStatement(QueryUtil.Q("q3"));
 			c.setAutoCommit(false);
 			for(int i = 0; i < employeeList.size(); i++){
 				Employee e = employeeList.get(i);
@@ -105,14 +108,14 @@ public class EmployeeService extends UtilC {
 
 		Employee e = new Employee();
 		try {
-			ps = c.prepareStatement(UtilQ.Q("q4"));
+			ps = c.prepareStatement(QueryUtil.Q("q4"));
 			ps.setString(1, eid);
 			ResultSet R = ps.executeQuery();
 			while (R.next()) {
 				e.empID(R.getString(1));
-				e.fULLnAME(R.getString(2));
+				e.fullName(R.getString(2));
 				e.address(R.getString(3));
-				e.fACULTYNAME(R.getString(4));
+				e.facultyName(R.getString(4));
 				e.department(R.getString(5));
 				e.designation(R.getString(6));
 			}
@@ -126,7 +129,7 @@ public class EmployeeService extends UtilC {
 	public void EMPLOYEEDELETE(String eid) {
 
 		try {
-			ps = c.prepareStatement(UtilQ.Q("q6"));
+			ps = c.prepareStatement(QueryUtil.Q("q6"));
 			ps.setString(1, eid);
 			ps.executeUpdate();
 		} catch (Exception e) {
@@ -138,14 +141,14 @@ public class EmployeeService extends UtilC {
 
 		ArrayList<Employee> l = new ArrayList<Employee>();
 		try {
-			ps = c.prepareStatement(UtilQ.Q("q5"));
+			ps = c.prepareStatement(QueryUtil.Q("q5"));
 			ResultSet r = ps.executeQuery();
 			while (r.next()) {
 				Employee e = new Employee();
 				e.empID(r.getString(1));
-				e.fULLnAME(r.getString(2));
+				e.fullName(r.getString(2));
 				e.address(r.getString(3));
-				e.fACULTYNAME(r.getString(4));
+				e.facultyName(r.getString(4));
 				e.department(r.getString(5));
 				e.designation(r.getString(6));
 				l.add(e);
