@@ -17,25 +17,37 @@ import java.io.IOException;
 import com.hackerthon.model.Employee;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Properties;
+
+import com.hackerthon.common.CommonConstants;
 import com.hackerthon.common.UtilC;
 
-public class GetEmpService extends UtilC {
+public class EmployeeService extends UtilC {
 
-	private final ArrayList<Employee> el = new ArrayList<Employee>();
+	private final ArrayList<Employee> employeeList = new ArrayList<Employee>();
 
 	private static Connection c;
 
 	private static Statement s;
+	
+	private static Logger logger = Logger.getLogger(EmployeeService.class.toString());
+	
+	private Properties properties;
 
 	private PreparedStatement ps;
 
-	public GetEmpService() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			c = DriverManager.getConnection(p.getProperty("url"), p.getProperty("username"),
-					p.getProperty("password"));
-		} catch (Exception e) {
-		} 
+	public EmployeeService() {
+		
+			try {
+				Class.forName(properties.getProperty(CommonConstants.DRIVER_NAME));
+				c = DriverManager.getConnection(properties.getProperty(CommonConstants.URL), properties.getProperty(CommonConstants.USERNAME),
+						properties.getProperty(CommonConstants.PASSWORD));
+			} catch (ClassNotFoundException e) {
+				logger.log(Level.SEVERE ,e.getMessage());
+			}
+			 catch (SQLException e) {
+				logger.log(Level.SEVERE ,e.getMessage());
+			}
 	}
 
 	public void EMPLOEESFROMXML() {
@@ -44,14 +56,14 @@ public class GetEmpService extends UtilC {
 			int s = UtilTRANSFORM.XMLXPATHS().size();
 			for (int i = 0; i < s; i++) {
 				Map<String, String> l = UtilTRANSFORM.XMLXPATHS().get(i);
-				Employee EMPLOYEE = new Employee();
-				EMPLOYEE.eMPLOYEEiD(l.get("XpathEmployeeIDKey"));
+				Employee emplo = new Employee();
+				EMPLOYEE.empID(l.get("XpathEmployeeIDKey"));
 				EMPLOYEE.fULLnAME(l.get("XpathEmployeeNameKey"));
-				EMPLOYEE.aDDRESS(l.get("XpathEmployeeAddressKey"));
+				EMPLOYEE.address(l.get("XpathEmployeeAddressKey"));
 				EMPLOYEE.fACULTYNAME(l.get("XpathFacultyNameKey"));
-				EMPLOYEE.dEPARTMENT(l.get("XpathDepartmentKey"));
-				EMPLOYEE.dESIGNATION(l.get("XpathDesignationKey"));
-				el.add(EMPLOYEE);
+				EMPLOYEE.department(l.get("XpathDepartmentKey"));
+				EMPLOYEE.designation(l.get("XpathDesignationKey"));
+				employeeList.add(EMPLOYEE);
 				System.out.println(EMPLOYEE.toString() + "\n");
 			}
 		} catch (Exception e) {
@@ -71,14 +83,14 @@ public class GetEmpService extends UtilC {
 		try {
 			ps = c.prepareStatement(UtilQ.Q("q3"));
 			c.setAutoCommit(false);
-			for(int i = 0; i < el.size(); i++){
-				Employee e = el.get(i);
-				ps.setString(1, e.EMPLOYEEiDgET());
-				ps.setString(2, e.fULLnAMEgET());
-				ps.setString(3, e.aDDRESSgET());
-				ps.setString(4, e.fACULTYnAMEgET());
-				ps.setString(5, e.dEPARTMENTgET());
-				ps.setString(6, e.dESIGNATIONgET());
+			for(int i = 0; i < employeeList.size(); i++){
+				Employee e = employeeList.get(i);
+				ps.setString(1, e.getEmpID());
+				ps.setString(2, e.getFullName());
+				ps.setString(3, e.getAddress());
+				ps.setString(4, e.getFacultyName());
+				ps.setString(5, e.getDepartment());
+				ps.setString(6, e.getDesignation());
 				ps.addBatch();
 			}
 			ps.executeBatch();
@@ -95,12 +107,12 @@ public class GetEmpService extends UtilC {
 			ps.setString(1, eid);
 			ResultSet R = ps.executeQuery();
 			while (R.next()) {
-				e.eMPLOYEEiD(R.getString(1));
+				e.empID(R.getString(1));
 				e.fULLnAME(R.getString(2));
-				e.aDDRESS(R.getString(3));
+				e.address(R.getString(3));
 				e.fACULTYNAME(R.getString(4));
-				e.dEPARTMENT(R.getString(5));
-				e.dESIGNATION(R.getString(6));
+				e.department(R.getString(5));
+				e.designation(R.getString(6));
 			}
 			ArrayList<Employee> l = new ArrayList<Employee>();
 			l.add(e);
@@ -128,12 +140,12 @@ public class GetEmpService extends UtilC {
 			ResultSet r = ps.executeQuery();
 			while (r.next()) {
 				Employee e = new Employee();
-				e.eMPLOYEEiD(r.getString(1));
+				e.empID(r.getString(1));
 				e.fULLnAME(r.getString(2));
-				e.aDDRESS(r.getString(3));
+				e.address(r.getString(3));
 				e.fACULTYNAME(r.getString(4));
-				e.dEPARTMENT(r.getString(5));
-				e.dESIGNATION(r.getString(6));
+				e.department(r.getString(5));
+				e.designation(r.getString(6));
 				l.add(e);
 			}
 		} catch (Exception e) {
@@ -149,9 +161,9 @@ public class GetEmpService extends UtilC {
 				.println("================================================================================================================");
 		for(int i = 0; i < l.size(); i++){
 			Employee e = l.get(i);
-			System.out.println(e.EMPLOYEEiDgET() + "\t" + e.fULLnAMEgET() + "\t\t"
-					+ e.aDDRESSgET() + "\t" + e.fACULTYnAMEgET() + "\t" + e.dEPARTMENTgET() + "\t"
-					+ e.dESIGNATIONgET() + "\n");
+			System.out.println(e.getEmpID() + "\t" + e.getFullName() + "\t\t"
+					+ e.getAddress() + "\t" + e.getFacultyName() + "\t" + e.getDepartment() + "\t"
+					+ e.getDesignation() + "\n");
 			System.out
 			.println("----------------------------------------------------------------------------------------------------------------");
 		}
