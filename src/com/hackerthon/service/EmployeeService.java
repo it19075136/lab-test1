@@ -17,25 +17,37 @@ import java.io.IOException;
 import com.hackerthon.model.Employee;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Properties;
+
+import com.hackerthon.common.CommonConstants;
 import com.hackerthon.common.UtilC;
 
-public class GetEmpService extends UtilC {
+public class EmployeeService extends UtilC {
 
-	private final ArrayList<Employee> el = new ArrayList<Employee>();
+	private final ArrayList<Employee> employeeList = new ArrayList<Employee>();
 
 	private static Connection c;
 
 	private static Statement s;
+	
+	private static Logger logger = Logger.getLogger(EmployeeService.class.toString());
+	
+	private Properties properties;
 
 	private PreparedStatement ps;
 
-	public GetEmpService() {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			c = DriverManager.getConnection(p.getProperty("url"), p.getProperty("username"),
-					p.getProperty("password"));
-		} catch (Exception e) {
-		} 
+	public EmployeeService() {
+		
+			try {
+				Class.forName(properties.getProperty(CommonConstants.DRIVER_NAME));
+				c = DriverManager.getConnection(properties.getProperty(CommonConstants.URL), properties.getProperty(CommonConstants.USERNAME),
+						properties.getProperty(CommonConstants.PASSWORD));
+			} catch (ClassNotFoundException e) {
+				logger.log(Level.SEVERE ,e.getMessage());
+			}
+			 catch (SQLException e) {
+				logger.log(Level.SEVERE ,e.getMessage());
+			}
 	}
 
 	public void EMPLOEESFROMXML() {
@@ -44,14 +56,14 @@ public class GetEmpService extends UtilC {
 			int s = UtilTRANSFORM.XMLXPATHS().size();
 			for (int i = 0; i < s; i++) {
 				Map<String, String> l = UtilTRANSFORM.XMLXPATHS().get(i);
-				Employee EMPLOYEE = new Employee();
+				Employee emplo = new Employee();
 				EMPLOYEE.empID(l.get("XpathEmployeeIDKey"));
 				EMPLOYEE.fULLnAME(l.get("XpathEmployeeNameKey"));
 				EMPLOYEE.address(l.get("XpathEmployeeAddressKey"));
 				EMPLOYEE.fACULTYNAME(l.get("XpathFacultyNameKey"));
 				EMPLOYEE.department(l.get("XpathDepartmentKey"));
 				EMPLOYEE.designation(l.get("XpathDesignationKey"));
-				el.add(EMPLOYEE);
+				employeeList.add(EMPLOYEE);
 				System.out.println(EMPLOYEE.toString() + "\n");
 			}
 		} catch (Exception e) {
@@ -71,8 +83,8 @@ public class GetEmpService extends UtilC {
 		try {
 			ps = c.prepareStatement(UtilQ.Q("q3"));
 			c.setAutoCommit(false);
-			for(int i = 0; i < el.size(); i++){
-				Employee e = el.get(i);
+			for(int i = 0; i < employeeList.size(); i++){
+				Employee e = employeeList.get(i);
 				ps.setString(1, e.getEmpID());
 				ps.setString(2, e.getFullName());
 				ps.setString(3, e.getAddress());
@@ -157,4 +169,5 @@ public class GetEmpService extends UtilC {
 		}
 		
 	}
+	
 }
