@@ -1,13 +1,22 @@
 package com.hackerthon.common;
 
 public class CommonConstants {
-	public static final String CONFIG_PROPERTIES="../config/config.properties";
-	public static final String XML_PATH="src/com/hackerthon/config/EmployeeQuery.xml";
-	public static final String QUERY="query";
+	
+  public static final String CONFIG_PROPERTIES="../config/config.properties";
+	
+  public static final String XML_PATH="src/com/hackerthon/config/EmployeeQuery.xml";
+	
+  public static final String QUERY="query";
+	
+	/** Constant for url key of MySQL database in config.properties */
 	public static final String URL = "url";
-	public static final String DRIVER_NAME = "driverName";
+	
+	/** Constant for user name key of MySQL database in config.properties */
 	public static final String USERNAME = "username";
+	
+	/** Constant for password key of MySQL database in config.properties */
 	public static final String PASSWORD = "password";
+
 	public static final String ID="id";
 	public static final String EMPLOYEE_REQUEST="src/com/hackerthon/config/EmployeeRequest.xml";
 	public static final String EMPLOYEE_MODIFIED="src/com/hackerthon/config/Employee-modified.xsl";
@@ -20,5 +29,26 @@ public class CommonConstants {
 	public static final String EMPLOYEE_DEPARTMENT_KEY="]/Department/text()";
 	public static final String EMPLOYEE_DESIGNATION_KEY="]/Designation/text()";
 	public static final String EMPLOYEE_ADRESS_KEY="]/EmployeeFullAddress/text()";
+
+	
+	
+	/** Constant for driver key of MySQL database in config.properties */
+	public static final String DRIVER_NAME = "driverName";
+	
+	/** Constant for query id of drop_table in EmployeeQuery.xml */
+	public static final String QUERY_ID_DROP_TABLE = "delete_employee" ;
+	
+	/** Constant for query id of create_table in EmployeeQuery.xml */
+	public static final String QUERY_ID_CREATE_TABLE = "create_employee_table";
+	
+	/** Constant for query id of insert_employees in EmployeeQuery.xml */
+	public static final String QUERY_ID_INSERT_EMPLOYEES = "insert_employee";
+	
+	/** Constant for query id of get_employee_byId in EmployeeQuery.xml */
+	public static final String QUERY_ID_GET_EMPLOYEE_BYID = "get_employee_ById";
+	
+	/** Constant for query id of get_all_employees in EmployeeQuery.xml */
+	public static final String QUERY_ID_GET_ALL_EMPLOYEES = "get_employees";
+
 
 }
