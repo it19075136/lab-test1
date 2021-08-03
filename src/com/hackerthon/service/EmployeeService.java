@@ -7,12 +7,10 @@ import java.sql.DriverManager;
 import javax.xml.parsers.ParserConfigurationException;
 import java.sql.PreparedStatement;
 import javax.xml.xpath.XPathExpressionException;
-import com.hackerthon.common.UtilTRANSFORM;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.sql.Statement;
-import com.hackerthon.common.UtilQ;
 import java.io.IOException;
 import com.hackerthon.model.Employee;
 import java.util.ArrayList;
@@ -21,6 +19,7 @@ import java.util.Properties;
 
 import com.hackerthon.common.CommonConstants;
 import com.hackerthon.common.UtilC;
+import com.hackerthon.common.UtilTRANSFORM;
 
 public class EmployeeService extends UtilC {
 
@@ -50,27 +49,27 @@ public class EmployeeService extends UtilC {
 			}
 	}
 
-	public void EMPLOEESFROMXML() {
+	public void employeesFromXML() {
 
 		try {
 			int s = UtilTRANSFORM.XMLXPATHS().size();
 			for (int i = 0; i < s; i++) {
-				Map<String, String> l = UtilTRANSFORM.XMLXPATHS().get(i);
-				Employee emplo = new Employee();
-				EMPLOYEE.empID(l.get("XpathEmployeeIDKey"));
-				EMPLOYEE.fULLnAME(l.get("XpathEmployeeNameKey"));
-				EMPLOYEE.address(l.get("XpathEmployeeAddressKey"));
-				EMPLOYEE.fACULTYNAME(l.get("XpathFacultyNameKey"));
-				EMPLOYEE.department(l.get("XpathDepartmentKey"));
-				EMPLOYEE.designation(l.get("XpathDesignationKey"));
-				employeeList.add(EMPLOYEE);
-				System.out.println(EMPLOYEE.toString() + "\n");
+				Map<String, String> empList= UtilTRANSFORM.XMLXPATHS().get(i);
+				Employee employee = Employee.getInstance();
+				employee.setEmpID(empList.get(CommonConstants.XPATH_EMP_ID));
+				employee.setFullName(empList.get(CommonConstants.XPATH_EMP_NAME));
+				employee.setAddress(empList.get(CommonConstants.XPATH_EMP_ADDRESS));
+				employee.setFacultyName(empList.get(CommonConstants.XPATH_EMP_FACULTY));
+				employee.setDepartment(empList.get(CommonConstants.XPATH_EMP_DEPARTMENT));
+				employee.setDesignation(empList.get(CommonConstants.XPATH_EMP_DESIGNATION));
+				employeeList.add(employee);
+				logger.info(employee.toString() + "\n");
 			}
 		} catch (Exception e) {
 		}
 	}
 
-	public void eMPLOYEEtABLEcREATE() {
+	public void createEmployeeTable() {
 		try {
 			s = c.createStatement();
 			s.executeUpdate(UtilQ.Q("q2"));
@@ -79,7 +78,7 @@ public class EmployeeService extends UtilC {
 		}
 	}
 
-	public void eMPLOYEESaDD() {
+	public void addEmployee() {
 		try {
 			ps = c.prepareStatement(UtilQ.Q("q3"));
 			c.setAutoCommit(false);
@@ -99,7 +98,7 @@ public class EmployeeService extends UtilC {
 		}
 	}
 
-	public void eMPLOYEEGETBYID(String eid) {
+	public void getEmployeeById(String eid) {
 
 		Employee e = new Employee();
 		try {
@@ -116,12 +115,12 @@ public class EmployeeService extends UtilC {
 			}
 			ArrayList<Employee> l = new ArrayList<Employee>();
 			l.add(e);
-			eMPLOYEEoUTPUT(l);
+			outputEmployee(l);
 		} catch (Exception ex) {
 		}
 	}
 
-	public void EMPLOYEEDELETE(String eid) {
+	public void DeleteEmployee(String eid) {
 
 		try {
 			ps = c.prepareStatement(UtilQ.Q("q6"));
@@ -132,7 +131,7 @@ public class EmployeeService extends UtilC {
 		}
 	}
 
-	public void eMPLOYEEdISPLAY() {
+	public void displayEmployee() {
 
 		ArrayList<Employee> l = new ArrayList<Employee>();
 		try {
@@ -150,10 +149,10 @@ public class EmployeeService extends UtilC {
 			}
 		} catch (Exception e) {
 		}
-		eMPLOYEEoUTPUT(l);
+		outputEmployee(l);
 	}
 	
-	public void eMPLOYEEoUTPUT(ArrayList<Employee> l){
+	public void outputEmployee(ArrayList<Employee> l){
 		
 		System.out.println("Employee ID" + "\t\t" + "Full Name" + "\t\t" + "Address" + "\t\t" + "Faculty Name" + "\t\t"
 				+ "Department" + "\t\t" + "Designation" + "\n");
