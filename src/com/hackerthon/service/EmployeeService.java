@@ -28,7 +28,7 @@ public class EmployeeService extends CommonUtil {
 
 	private final ArrayList<Employee> employeeList = new ArrayList<Employee>();
 
-	private static Connection c;
+	private static Connection connection;
 
 	private static Statement s;
 	
@@ -36,15 +36,15 @@ public class EmployeeService extends CommonUtil {
 	
 	private Properties properties;
 
-	private PreparedStatement ps;
+	private PreparedStatement preparedStatement;
 	
-	private static final String emp;
+	private static final int emp = 0;
 
 	public EmployeeService() {
 		
 			try {
 				Class.forName(properties.getProperty(CommonConstants.DRIVER_NAME));
-				c = DriverManager.getConnection(properties.getProperty(CommonConstants.URL), properties.getProperty(CommonConstants.USERNAME),
+				connection = DriverManager.getConnection(properties.getProperty(CommonConstants.URL), properties.getProperty(CommonConstants.USERNAME),
 						properties.getProperty(CommonConstants.PASSWORD));
 			} catch (ClassNotFoundException e) {
 				logger.log(Level.SEVERE ,e.getMessage());
@@ -76,7 +76,7 @@ public class EmployeeService extends CommonUtil {
 
 	public void createEmployeeTable() {
 		try {
-			s = c.createStatement();
+			s = connection.createStatement();
 			s.executeUpdate(QueryUtil.Q("q2"));
 			s.executeUpdate(QueryUtil.Q("q1"));
 		} catch (Exception e) {
@@ -85,31 +85,35 @@ public class EmployeeService extends CommonUtil {
 
 	public void addEmployee() {
 		try {
-			ps = c.prepareStatement(QueryUtil.Q("q3"));
-			c.setAutoCommit(false);
+			preparedStatement = connection.prepareStatement(QueryUtil.Q("q3"));
+			connection.setAutoCommit(false);
 			for(int i = 0; i < employeeList.size(); i++){
 				Employee e = employeeList.get(i);
-				ps.setString(1, e.getEmpID());
-				ps.setString(2, e.getFullName());
-				ps.setString(3, e.getAddress());
-				ps.setString(4, e.getFacultyName());
-				ps.setString(5, e.getDepartment());
-				ps.setString(6, e.getDesignation());
-				ps.addBatch();
+				preparedStatement.setString(1, e.getEmpID());
+				preparedStatement.setString(2, e.getFullName());
+				preparedStatement.setString(3, e.getAddress());
+				preparedStatement.setString(4, e.getFacultyName());
+				preparedStatement.setString(5, e.getDepartment());
+				preparedStatement.setString(6, e.getDesignation());
+				preparedStatement.addBatch();
 			}
-			ps.executeBatch();
-			c.commit();
+			preparedStatement.executeBatch();
+			connection.commit();
 		} catch (Exception e) {
 		}
 	}
 
+<<<<<<< HEAD
+	public void employeeGetById(String eid) {
+=======
 	public void getEmployeeById(String eid) {
+>>>>>>> c9448e6c7018c4ce56f90887929040df6e23887b
 
 		Employee e = new Employee();
 		try {
-			ps = c.prepareStatement(QueryUtil.Q("q4"));
-			ps.setString(1, eid);
-			ResultSet R = ps.executeQuery();
+			preparedStatement = connection.prepareStatement(QueryUtil.Q("q4"));
+			preparedStatement.setString(1, eid);
+			ResultSet R = preparedStatement.executeQuery();
 			while (R.next()) {
 				e.empID(R.getString(1));
 				e.fullName(R.getString(2));
@@ -125,12 +129,16 @@ public class EmployeeService extends CommonUtil {
 		}
 	}
 
+<<<<<<< HEAD
+	public void deleteEmployee(String eid) {
+=======
 	public void DeleteEmployee(String eid) {
+>>>>>>> c9448e6c7018c4ce56f90887929040df6e23887b
 
 		try {
-			ps = c.prepareStatement(QueryUtil.Q("q6"));
-			ps.setString(1, eid);
-			ps.executeUpdate();
+			preparedStatement = connection.prepareStatement(QueryUtil.Q("q6"));
+			preparedStatement.setString(1, eid);
+			preparedStatement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -140,8 +148,8 @@ public class EmployeeService extends CommonUtil {
 
 		ArrayList<Employee> l = new ArrayList<Employee>();
 		try {
-			ps = c.prepareStatement(QueryUtil.Q("q5"));
-			ResultSet r = ps.executeQuery();
+			preparedStatement = connection.prepareStatement(QueryUtil.Q("q5"));
+			ResultSet r = preparedStatement.executeQuery();
 			while (r.next()) {
 				Employee e = new Employee();
 				e.empID(r.getString(1));
