@@ -7,19 +7,19 @@ import java.sql.DriverManager;
 import javax.xml.parsers.ParserConfigurationException;
 import java.sql.PreparedStatement;
 import javax.xml.xpath.XPathExpressionException;
-import com.hackerthon.common.UtilTRANSFORM;
+import com.hackerthon.common.TransformUtil;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.sql.Statement;
-import com.hackerthon.common.UtilQ;
+import com.hackerthon.common.QueryUtil;
 import java.io.IOException;
 import com.hackerthon.model.Employee;
 import java.util.ArrayList;
 import java.util.Map;
-import com.hackerthon.common.UtilC;
+import com.hackerthon.common.CommonUtil;
 
-public class GetEmpService extends UtilC {
+public class GetEmpService extends CommonUtil {
 
 	private final ArrayList<Employee> el = new ArrayList<Employee>();
 
@@ -41,9 +41,9 @@ public class GetEmpService extends UtilC {
 	public void EMPLOEESFROMXML() {
 
 		try {
-			int s = UtilTRANSFORM.XMLXPATHS().size();
+			int s = TransformUtil.XMLXPATHS().size();
 			for (int i = 0; i < s; i++) {
-				Map<String, String> l = UtilTRANSFORM.XMLXPATHS().get(i);
+				Map<String, String> l = TransformUtil.XMLXPATHS().get(i);
 				Employee EMPLOYEE = new Employee();
 				EMPLOYEE.eMPLOYEEiD(l.get("XpathEmployeeIDKey"));
 				EMPLOYEE.fULLnAME(l.get("XpathEmployeeNameKey"));
@@ -61,15 +61,15 @@ public class GetEmpService extends UtilC {
 	public void eMPLOYEEtABLEcREATE() {
 		try {
 			s = c.createStatement();
-			s.executeUpdate(UtilQ.Q("q2"));
-			s.executeUpdate(UtilQ.Q("q1"));
+			s.executeUpdate(QueryUtil.Q("q2"));
+			s.executeUpdate(QueryUtil.Q("q1"));
 		} catch (Exception e) {
 		}
 	}
 
 	public void eMPLOYEESaDD() {
 		try {
-			ps = c.prepareStatement(UtilQ.Q("q3"));
+			ps = c.prepareStatement(QueryUtil.Q("q3"));
 			c.setAutoCommit(false);
 			for(int i = 0; i < el.size(); i++){
 				Employee e = el.get(i);
@@ -91,7 +91,7 @@ public class GetEmpService extends UtilC {
 
 		Employee e = new Employee();
 		try {
-			ps = c.prepareStatement(UtilQ.Q("q4"));
+			ps = c.prepareStatement(QueryUtil.Q("q4"));
 			ps.setString(1, eid);
 			ResultSet R = ps.executeQuery();
 			while (R.next()) {
@@ -112,7 +112,7 @@ public class GetEmpService extends UtilC {
 	public void EMPLOYEEDELETE(String eid) {
 
 		try {
-			ps = c.prepareStatement(UtilQ.Q("q6"));
+			ps = c.prepareStatement(QueryUtil.Q("q6"));
 			ps.setString(1, eid);
 			ps.executeUpdate();
 		} catch (Exception e) {
@@ -124,7 +124,7 @@ public class GetEmpService extends UtilC {
 
 		ArrayList<Employee> l = new ArrayList<Employee>();
 		try {
-			ps = c.prepareStatement(UtilQ.Q("q5"));
+			ps = c.prepareStatement(QueryUtil.Q("q5"));
 			ResultSet r = ps.executeQuery();
 			while (r.next()) {
 				Employee e = new Employee();

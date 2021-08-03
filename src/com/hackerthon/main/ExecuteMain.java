@@ -4,7 +4,7 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
-import com.hackerthon.common.UtilTRANSFORM;
+import com.hackerthon.common.TransformUtil;
 import com.hackerthon.service.GetEmpService;
 
 public class ExecuteMain {
@@ -16,7 +16,7 @@ public class ExecuteMain {
 
 		GetEmpService employeeService = new GetEmpService();
 		try {
-			UtilTRANSFORM.rEQUESTtRANSFORM();
+			TransformUtil.rEQUESTtRANSFORM();
 			employeeService.EMPLOEESFROMXML();
 			employeeService.eMPLOYEEtABLEcREATE();
 			employeeService.eMPLOYEESaDD();
