@@ -30,13 +30,13 @@ public class EmployeeService extends CommonUtil {
 
 	private static Connection c;
 
-	private static Statement s;
+	private static Statement statement;
 	
 	private static Logger logger = Logger.getLogger(EmployeeService.class.toString());
 	
 	private Properties properties;
 
-	private PreparedStatement ps;
+	private PreparedStatement preparedStatement;
 	
 	private static final String emp;
 
@@ -76,9 +76,9 @@ public class EmployeeService extends CommonUtil {
 
 	public void createEmployeeTable() {
 		try {
-			s = c.createStatement();
-			s.executeUpdate(QueryUtil.Q("q2"));
-			s.executeUpdate(QueryUtil.Q("q1"));
+			statement = c.createStatement();
+			statement.executeUpdate(QueryUtil.Q(CommonConstants.QUERY_ID_DROP_TABLE));
+			statement.executeUpdate(QueryUtil.Q(CommonConstants.QUERY_ID_CREATE_TABLE));
 		} catch (Exception e) {
 		}
 	}
@@ -89,13 +89,13 @@ public class EmployeeService extends CommonUtil {
 			c.setAutoCommit(false);
 			for(int i = 0; i < employeeList.size(); i++){
 				Employee e = employeeList.get(i);
-				ps.setString(1, e.getEmpID());
-				ps.setString(2, e.getFullName());
-				ps.setString(3, e.getAddress());
-				ps.setString(4, e.getFacultyName());
-				ps.setString(5, e.getDepartment());
-				ps.setString(6, e.getDesignation());
-				ps.addBatch();
+				preparedStatement.setString(1, e.getEmpID());
+				preparedStatement.setString(2, e.getFullName());
+				preparedStatement.setString(3, e.getAddress());
+				preparedStatement.setString(4, e.getFacultyName());
+				preparedStatement.setString(5, e.getDepartment());
+				preparedStatement.setString(6, e.getDesignation());
+				preparedStatement.addBatch();
 			}
 			ps.executeBatch();
 			c.commit();

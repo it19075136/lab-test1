@@ -45,7 +45,7 @@ public class Employee {
 		this.nameFull = fullName;
 	}
 	//get Address
-	public String setGetAddress() {
+	public String getAddress() {
 		return address;
 	}
 	//set Address
