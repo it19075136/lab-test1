@@ -2,17 +2,28 @@ package com.hackerthon.model;
 
 public class Employee {
 
-	public String iDeMPLOYEE;
+	public String employeeId;
 	public String nAMEfULL;
 	public String aDDRESS;
 	public String fACULTYnAME;
 	public String dEPARTMENT;
 	public String dESIGNATION;
+	private static Employee employee = null;
+	
+    // static method to create instance of Employee class
+    public static Employee getInstance()
+    {
+        if (employee == null)
+            employee = new Employee();
+  
+        return employee;
+    }
+    
 	public String EMPLOYEEiDgET() {
-		return iDeMPLOYEE;
+		return employeeId;
 	}
 	public void eMPLOYEEiD(String employeeID) {
-		iDeMPLOYEE = employeeID;
+		employeeId = employeeID;
 	}
 	public String fULLnAMEgET() {
 		return nAMEfULL;
@@ -47,7 +58,7 @@ public class Employee {
 	@Override
 	public String toString() {
 		
-		return "Employee ID = " + iDeMPLOYEE + "\n" + "FullName = " + nAMEfULL + "\n" + "Address = " + aDDRESS + "\n"
+		return "Employee ID = " + employeeId + "\n" + "FullName = " + nAMEfULL + "\n" + "Address = " + aDDRESS + "\n"
 				+ "Faculty Name = " + fACULTYnAME + "\n" + "Department = " + dEPARTMENT + "\n" + "Designation = "
 				+ dESIGNATION;
 	}
