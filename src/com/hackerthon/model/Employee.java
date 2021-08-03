@@ -1,54 +1,73 @@
 package com.hackerthon.model;
-
+/**
+ * 
+ * @author 2021S2_REG_WE_18
+ * 
+ * Employee Class 
+ *
+ */
 public class Employee {
 
-	public String iDeMPLOYEE;
-	public String nAMEfULL;
-	public String aDDRESS;
-	public String fACULTYnAME;
-	public String dEPARTMENT;
-	public String dESIGNATION;
-	public String EMPLOYEEiDgET() {
-		return iDeMPLOYEE;
+	private String idEmployee;
+	private String nameFull;
+	private String address;
+	private String facultyName;
+	private String department;
+	private String designation;
+	
+    //get Employee ID
+	public String getEmpID() {
+		return idEmployee;
 	}
-	public void eMPLOYEEiD(String employeeID) {
-		iDeMPLOYEE = employeeID;
+	//set Employee ID
+	public void empID(String employeeID) {
+		this.idEmployee = employeeID;
 	}
-	public String fULLnAMEgET() {
-		return nAMEfULL;
+	//get Full Name
+	public String getFullName() {
+		return nameFull;
 	}
-	public void fULLnAME(String fullName) {
-		nAMEfULL = fullName;
+	//set Full Name
+	public void fullName(String fullName) {
+		this.nameFull = fullName;
 	}
-	public String aDDRESSgET() {
-		return aDDRESS;
+	//get Address
+	public String getAddress() {
+		return address;
 	}
-	public void aDDRESS(String address) {
-		aDDRESS = address;
+	//set Address
+	public void address(String address) {
+		this.address = address;
 	}
-	public String fACULTYnAMEgET() {
-		return fACULTYnAME;
+	//get Faculty Name
+	public String getFacultyName() {
+		return facultyName;
 	}
-	public void fACULTYNAME(String facultyName) {
-		fACULTYnAME = facultyName;
+	//set Faculty Name
+	public void facultyName(String facultyName) {
+		this.facultyName = facultyName;
 	}
-	public String dEPARTMENTgET() {
-		return dEPARTMENT;
+	//get Department 
+	public String getDepartment() {
+		return department;
 	}
-	public void dEPARTMENT(String department) {
-		dEPARTMENT = department;
+	//set Department
+	public void department(String department) {
+		this.department = department;
 	}
-	public String dESIGNATIONgET() {
-		return dESIGNATION;
+	//get getDesignation
+	public String getDesignation() {
+		return designation;
 	}
-	public void dESIGNATION(String designation) {
-		dESIGNATION = designation;
+	//set designation 
+	public void designation(String designation) {
+		this.designation = designation;
 	}
+	
 	@Override
 	public String toString() {
-		
-		return "Employee ID = " + iDeMPLOYEE + "\n" + "FullName = " + nAMEfULL + "\n" + "Address = " + aDDRESS + "\n"
-				+ "Faculty Name = " + fACULTYnAME + "\n" + "Department = " + dEPARTMENT + "\n" + "Designation = "
-				+ dESIGNATION;
+		return "Employee ID = " + idEmployee + "\n" + "FullName = " + nameFull + "\n" + "Address = " + address + "\n"
+				+ "Faculty Name = " + facultyName + "\n" + "Department = " + department + "\n" + "Designation = "
+				+ designation;
 	}
 }
